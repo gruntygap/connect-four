@@ -15,6 +15,13 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
+			GameModel game = new GameModel(6, 7);
+			System.out.println(game);
+			game.makeMove(0, 1);
+			game.makeMove(0, 1);
+			game.makeMove(0, 1);
+			game.makeMove(0, 1);
+			System.out.println(game);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
