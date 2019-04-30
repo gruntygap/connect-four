@@ -61,7 +61,34 @@ public class GameModel {
 				}
 			}
 		}
-		// TODO: Checking for Diagonal (from down to up) wins
+		// Checking for Diagonal (from down to up) wins
+		for (int i = this.maxLengthOfWin - 1; i < this.grid.length; i++) {
+			int inARow = 0;
+			for (int j = 0; j < i+1; j++) {
+				if (this.grid[i-j][j] == playerToken) {
+					inARow++;
+					if (inARow == this.maxLengthOfWin) {
+						return true;
+					}
+				} else {
+					inARow = 0;
+				}
+			}
+		}
+		int bottomRowCoord = this.grid.length - 1;
+		for (int i = 1; i < this.grid[0].length - (this.maxLengthOfWin - 1); i++) {
+			int inARow = 0;
+			for (int j = i; j < this.grid[0].length; j++) {
+				if (this.grid[bottomRowCoord-(j-i)][j] == playerToken) {
+					inARow++;
+					if (inARow == this.maxLengthOfWin) {
+						return true;
+					}
+				} else {
+					inARow = 0;
+				}
+			}
+		}
 		// TODO: Checking for Diagonal (from up to down) wins
 		return false;
 	}
