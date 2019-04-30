@@ -3,12 +3,15 @@ package application;
 // TODO: Make security better, change things to private 
 public class GameModel {
 	
-	public int[][] grid;
+	private int[][] grid;
 	
 	public int maxLengthOfWin;
 	
+	public int turn;
+	
 	public GameModel(int numRows, int numCols) {
 		configureGrid(numRows, numCols);
+		turn = 1;
 		maxLengthOfWin = 4;
 	}
 	
@@ -119,7 +122,11 @@ public class GameModel {
 		return false;
 	}
 	
-	public void makeMove(int row, int playerToken) {
+	public void makeMove(int row, int playerToken) throws Exception {
+		// Out of bounds error
+		if (row < 0 || row > this.grid.length) {
+			throw new Exception("The row of your desired placement is out of bounds!");
+		}
 		int position = -1;
 		for (int i = 0; i < this.grid.length; i++) {
 			if (this.grid[i][row] == 0) {
@@ -128,6 +135,19 @@ public class GameModel {
 		}
 		if (position != -1) {
 			this.grid[position][row] = playerToken;
+		} else {
+			throw new Exception("That Column is full!");
+		}
+		if (!hasWon(this.turn)) {
+			changeTurn();
+		}
+	}
+	
+	public void changeTurn() {
+		if (this.turn == 1) {
+			this.turn = 2;
+		} else {
+			this.turn = 1;
 		}
 	}
 	
@@ -135,7 +155,11 @@ public class GameModel {
 		String ret = "";
 		for (int i = 0; i < this.grid.length; i++) {
 			for (int j = 0; j < this.grid[i].length; j++) {
-				ret = ret + this.grid[i][j] + "\t";
+				if (this.grid[i][j] == 0) {
+					ret = ret + "( )" + "\t";
+				} else {
+					ret = ret + "(" + this.grid[i][j] + ")" + "\t";
+				}
 			}
 			ret = ret + "\n";
 		}
