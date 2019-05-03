@@ -47,7 +47,48 @@ public class AIPlayer {
 	}
 	
 	public int nextMoveRecurse(int[][] grid, boolean isMax) {
-		return 0;
+		// Evaluations of the current board, and break statements.
+		int playerMoving = isMax ? 1 : 2;
+		boolean someoneWon = hasWon(grid, playerMoving, 4);
+		boolean gameOver = boardFull(grid);
+		
+		if (playerMoving == 1 && someoneWon) {
+			return 1;
+		} else if (playerMoving == 2 && someoneWon) {
+			return -1;
+		} else if (gameOver && !someoneWon) {
+			return 0;
+		}
+		
+		// Start the recursive elements
+		// Doing a Min-Max Search
+		if (isMax) {
+			int bestMax = -1;
+			int[] pos = getPossibleMoves(grid);
+			for (int i = 0; i < pos.length; i++) {
+				int[][] newGrid = makeMove(grid, pos[i], 1);
+				int nextMax = nextMoveRecurse(newGrid, !isMax);
+				
+				if (nextMax > bestMax) {
+					bestMax = nextMax;
+				}
+			}
+			return bestMax;
+		} else {
+			int bestMin = 1;
+			int[] pos = getPossibleMoves(grid);
+			for (int i = 0; i < pos.length; i++) {
+				int[][] newGrid = makeMove(grid, pos[i], 2);
+				int nextMin = nextMoveRecurse(newGrid, !isMax);
+				
+				if (bestMin > nextMin) {
+					bestMin = nextMin;
+				}
+			}
+			return bestMin;
+		}
+		
+		
 	}
 	
 	public int[] getPossibleMoves(int[][] grid) {
@@ -174,5 +215,16 @@ public class AIPlayer {
 			copyOfGrid[position][col] = playerToken;
 		}
 		return copyOfGrid;
+	}
+	
+	public boolean boardFull(int[][] grid) {
+		for(int i = 0; i < grid.length; i++) {
+			for(int j = 0; j < grid[i].length; j++) {
+				if (grid[i][j] == 0) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }
