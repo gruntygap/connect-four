@@ -28,6 +28,17 @@ public class GameModel {
 	}
 	
 	/**
+	 * Additional constructor for use by the AI player
+	 * @param grid - The grid to sub in for this.grid
+	 * @param turn - The turn to start on. (Shouldn't matter because we really only want the hasWon)
+	 */
+	public GameModel(int [][] grid, int turn) {
+		this.grid = grid;
+		this.turn = turn;
+		this.lengthOfWin = 4;
+	}
+	
+	/**
 	 * Method which handles starting our grid, with all 0's 
 	 * @param numRows - Number of rows for the grid
 	 * @param numCols - Number of columns for the grid
@@ -193,6 +204,14 @@ public class GameModel {
 	 */
 	public int getTurn() {
 		return this.turn;
+	}
+	
+	/**
+	 * Gets the board, and returns to the caller
+	 * @return - This.grid, for the ai's vision
+	 */
+	public int[][] getGrid(){
+		return this.grid;
 	}
 	
 	/**
