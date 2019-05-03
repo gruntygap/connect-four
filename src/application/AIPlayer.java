@@ -28,18 +28,22 @@ public class AIPlayer {
 		
 		for (int i = 0; i < pos.length; i++) {
 			int[][] newGrid = makeMove(grid, pos[i], 1);
-			System.out.println("TEST POSITION: " + pos[i]);
-			for (int j = 0; j < newGrid.length; j++) {
-				for (int k = 0; k < newGrid.length; k++) {
-					System.out.print(grid[j][k] + "\t");
-				}
-				System.out.print("\n");
+//			System.out.println("TEST POSITION: " + pos[i]);
+//			for (int j = 0; j < newGrid.length; j++) {
+//				for (int k = 0; k < newGrid[0].length; k++) {
+//					System.out.print(newGrid[j][k] + "\t");
+//				}
+//				System.out.print("\n");
+//			}
+//			System.out.println("--------------------------------------");
+			int moveVal = nextMoveRecurse(newGrid, false);
+			
+			if (moveVal > bestVal) {
+				this.nextColumn = pos[i];
+				bestVal = moveVal;
 			}
-			System.out.println("--------------------------------------");
-//			int moveVal = nextMoveRecurse(grid);
 		}
-		this.nextColumn = 0;
-		return 0;
+		return bestVal;
 	}
 	
 	public int nextMoveRecurse(int[][] grid, boolean isMax) {
@@ -58,6 +62,7 @@ public class AIPlayer {
 		for(int i = 0; i < grid[0].length; i++) {
 			if (grid[0][i] == 0) {
 				possibleMoves[count] = i;
+				count++;
 			}
 		}
 		return possibleMoves;
