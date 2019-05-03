@@ -23,7 +23,7 @@ public class AIPlayer {
 	}
 	
 	public int firstNextMoveRecurse(int[][] grid) {
-		int bestVal = -2;
+		int bestVal = -5;
 		int [] pos = getPossibleMoves(grid);
 		
 		for (int i = 0; i < pos.length; i++) {
@@ -36,7 +36,9 @@ public class AIPlayer {
 //				System.out.print("\n");
 //			}
 //			System.out.println("--------------------------------------");
-			int moveVal = nextMoveRecurse(newGrid, false);
+//			int test = inARow(newGrid, 1);
+//			System.out.println("Most: " + test);
+			int moveVal = nextMoveRecurse(newGrid, false, -4, 4);
 			
 			if (moveVal > bestVal) {
 				this.nextColumn = pos[i];
@@ -46,44 +48,56 @@ public class AIPlayer {
 		return bestVal;
 	}
 	
-	public int nextMoveRecurse(int[][] grid, boolean isMax) {
+	public int nextMoveRecurse(int[][] grid, boolean isMax, int alpha, int beta) {
 		// Evaluations of the current board, and break statements.
 		int playerMoving = isMax ? 1 : 2;
+		if (beta <= alpha) {
+			return playerMoving == 1 ? 4 : -4;
+		}
+		int mostInARow = inARow(grid, playerMoving);
 		boolean someoneWon = hasWon(grid, playerMoving, 4);
 		boolean gameOver = boardFull(grid);
 		
 		if (playerMoving == 1 && someoneWon) {
-			return 1;
+			return 4;
 		} else if (playerMoving == 2 && someoneWon) {
-			return -1;
+			return -4;
 		} else if (gameOver && !someoneWon) {
 			return 0;
+		} else if (mostInARow > 1) {
+			if (playerMoving == 1) {
+				return mostInARow;
+			} else {
+				return -(mostInARow);
+			}
 		}
 		
 		// Start the recursive elements
-		// Doing a Min-Max Search
+		// Doing a MiniMax Search
 		if (isMax) {
-			int bestMax = -1;
+			int bestMax = -4;
 			int[] pos = getPossibleMoves(grid);
 			for (int i = 0; i < pos.length; i++) {
 				int[][] newGrid = makeMove(grid, pos[i], 1);
-				int nextMax = nextMoveRecurse(newGrid, !isMax);
+				int nextMax = nextMoveRecurse(newGrid, !isMax, alpha, beta);
 				
 				if (nextMax > bestMax) {
 					bestMax = nextMax;
 				}
+				alpha = alpha > bestMax ? alpha : bestMax;
 			}
 			return bestMax;
 		} else {
-			int bestMin = 1;
+			int bestMin = 4;
 			int[] pos = getPossibleMoves(grid);
 			for (int i = 0; i < pos.length; i++) {
 				int[][] newGrid = makeMove(grid, pos[i], 2);
-				int nextMin = nextMoveRecurse(newGrid, !isMax);
+				int nextMin = nextMoveRecurse(newGrid, !isMax, alpha, beta);
 				
 				if (bestMin > nextMin) {
 					bestMin = nextMin;
 				}
+				beta = beta < bestMin ? beta : bestMin;
 			}
 			return bestMin;
 		}
@@ -226,5 +240,143 @@ public class AIPlayer {
 			}
 		}
 		return true;
+	}
+	
+	public int inARow(int[][] grid, int playerToken) {
+		int mostInARow = 0;
+		// Checking for Horizontal wins
+		for(int i = 0; i < grid.length; i++) {
+			int inARow = 0;
+			int mostInARowForThisGo = 0;
+			for(int j = 0; j < grid[i].length; j++) {
+				if (grid[i][j] == playerToken) {
+					inARow++;
+				} else {
+					if (inARow > mostInARowForThisGo) {
+						mostInARowForThisGo = inARow;
+					}
+					inARow = 0;
+				}
+			}
+			if (inARow > mostInARowForThisGo) {
+				mostInARowForThisGo = inARow;
+			}
+			
+			if (mostInARowForThisGo > mostInARow) {
+				mostInARow = mostInARowForThisGo;
+			}
+		}
+		
+		// Checking for Vertical wins
+		for(int j = 0; j < grid[0].length; j++) {
+			int inARow = 0;
+			int mostInARowForThisGo = 0;
+			for(int i = 0; i < grid.length; i++) {
+				if (grid[i][j] == playerToken) {
+					inARow++;
+				} else {
+					if (inARow > mostInARowForThisGo) {
+						mostInARowForThisGo = inARow;
+					}
+					inARow = 0;
+				}
+			}
+			if (inARow > mostInARowForThisGo) {
+				mostInARowForThisGo = inARow;
+			}
+			
+			if (mostInARowForThisGo > mostInARow) {
+				mostInARow = mostInARowForThisGo;
+			}
+		}
+		// Checking for Diagonal (from down to up) wins
+		for (int i = 2 - 1; i < grid.length; i++) {
+			int inARow = 0;
+			int mostInARowForThisGo = 0;
+			for (int j = 0; j < i+1; j++) {
+				if (grid[i-j][j] == playerToken) {
+					inARow++;
+				} else {
+					if (inARow > mostInARowForThisGo) {
+						mostInARowForThisGo = inARow;
+					}
+					inARow = 0;
+				}
+			}
+			if (inARow > mostInARowForThisGo) {
+				mostInARowForThisGo = inARow;
+			}
+			
+			if (mostInARowForThisGo > mostInARow) {
+				mostInARow = mostInARowForThisGo;
+			}
+		}
+		int bottomRowCoord = grid.length - 1;
+		for (int i = 1; i < grid[0].length - (2 - 1); i++) {
+			int inARow = 0;
+			int mostInARowForThisGo = 0;
+			for (int j = i; j < grid[0].length; j++) {
+				if (grid[bottomRowCoord-(j-i)][j] == playerToken) {
+					inARow++;
+				} else {
+					if (inARow > mostInARowForThisGo) {
+						mostInARowForThisGo = inARow;
+					}
+					inARow = 0;
+				}
+			}
+			if (inARow > mostInARowForThisGo) {
+				mostInARowForThisGo = inARow;
+			}
+			
+			if (mostInARowForThisGo > mostInARow) {
+				mostInARow = mostInARowForThisGo;
+			}
+		}
+		// Checking for Diagonal (from up to down) wins
+		for (int i = grid[0].length - 2; i > 0 ; i--) {
+			int inARow = 0;
+			int mostInARowForThisGo = 0;
+			for (int j = i; j < grid[0].length; j++) {
+				if (grid[j-i][j] == playerToken) {
+					inARow++;
+				} else {
+					if (inARow > mostInARowForThisGo) {
+						mostInARowForThisGo = inARow;
+					}
+					inARow = 0;
+				}
+			}
+			if (inARow > mostInARowForThisGo) {
+				mostInARowForThisGo = inARow;
+			}
+			
+			if (mostInARowForThisGo > mostInARow) {
+				mostInARow = mostInARowForThisGo;
+			}
+		}
+		for (int i = 0; i < grid.length - (2 - 1); i++) {
+			int inARow = 0;
+			int mostInARowForThisGo = 0;
+			for (int j = 0; j < grid.length - i; j++) {
+				if (grid[i+j][j] == playerToken) {
+					inARow++;
+				} else {
+					if (inARow > mostInARowForThisGo) {
+						mostInARowForThisGo = inARow;
+					}
+					inARow = 0;
+				}
+			}
+			if (inARow > mostInARowForThisGo) {
+				mostInARowForThisGo = inARow;
+			}
+			
+			if (mostInARowForThisGo > mostInARow) {
+				mostInARow = mostInARowForThisGo;
+			}
+		}
+		// If it's not true by now, it's false.
+		return mostInARow;
 	}
 }

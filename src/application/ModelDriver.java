@@ -17,6 +17,24 @@ public class ModelDriver {
 		
 		// Start new game
 		GameModel game = new GameModel(6, 7);
+//		try {
+//			game.makeMove(0, 3);
+//			game.makeMove(0, 3);
+//			game.makeMove(1, 3);
+//			game.makeMove(1, 3);
+//			game.makeMove(2, 3);
+//			game.makeMove(2, 3);
+//			game.makeMove(3, 3);
+//			game.makeMove(3, 3);
+//			game.makeMove(4, 3);
+//			game.makeMove(4, 3);
+//			game.makeMove(5, 3);
+//			game.makeMove(5, 3);
+//			game.makeMove(6, 3);
+//			game.makeMove(6, 3);
+//		} catch(Exception e) {
+//			System.out.println(e.getMessage());
+//		}
 		// Print the game
 		System.out.println(game);
 		
