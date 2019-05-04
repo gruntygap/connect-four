@@ -46,7 +46,7 @@ public class AIPlayer {
 //				System.out.print("\n");
 //			}
 //			System.out.println("--------------------------------------");
-			int moveVal = nextMoveRecurse(newGrid, false, 1, -2, 2);
+			int moveVal = nextMoveRecurse(newGrid, false, 1, -100000, 100000);
 			
 			if (moveVal > bestVal) {
 				this.nextColumn = pos[i];
@@ -63,20 +63,19 @@ public class AIPlayer {
 		boolean gameOver = boardFull(grid);
 		
 		if (playerMoving == 1 && someoneWon) {
-			return 1;
+			return 10000;
 		} else if (playerMoving == 2 && someoneWon) {
-			return -1;
+			return -10000;
 		} else if (gameOver && !someoneWon) {
 			return 0;
 		} else if (depth == this.maxDepth) {
-			// RETURN SCORE
-			return 0;
+			return this.getScore(grid);
 		}
 		
 		// Start the recursive elements
 		// Doing a Min-Max Search
 		if (isMax) {
-			int bestMax = -2;
+			int bestMax = -100000;
 			
 			int[] pos = getPossibleMoves(grid);
 			for (int i = 0; i < pos.length; i++) {
@@ -94,7 +93,7 @@ public class AIPlayer {
 			}
 			return bestMax;
 		} else {
-			int bestMin = 2;
+			int bestMin = 100000;
 			
 			int[] pos = getPossibleMoves(grid);
 			for (int i = 0; i < pos.length; i++) {
@@ -250,5 +249,123 @@ public class AIPlayer {
 			}
 		}
 		return true;
+	}
+
+	public int getScore(int[][] grid) {
+		return playerBoardVal(grid,1) + -(playerBoardVal(grid,2));
+	}
+	
+	public int playerBoardVal(int[][] grid, int playerToken) {
+		int twoInARowScore = 50;
+		int threeInARowScore = 500;
+		int horizontalScore = 0;
+		// Checking for Horizontal wins
+		for(int i = 0; i < grid.length; i++) {
+			int inARow = 0;
+			for(int j = 0; j < grid[i].length; j++) {
+				if (grid[i][j] == playerToken) {
+					inARow++;
+				} else {
+					if (inARow == 2) {
+						horizontalScore += twoInARowScore;
+					}
+					else if (inARow == 3) {
+						horizontalScore += threeInARowScore;
+					}
+					inARow = 0;
+				}
+			}
+		}
+		
+		int verticalScore = 0;
+		// Checking for Vertical wins
+		for(int j = 0; j < grid[0].length; j++) {
+			int inARow = 0;
+			for(int i = 0; i < grid.length; i++) {
+				if (grid[i][j] == playerToken) {
+					inARow++;
+				} else {
+					if (inARow == 2) {
+						verticalScore += twoInARowScore;
+					}
+					else if (inARow == 3) {
+						verticalScore += threeInARowScore;
+					}
+					inARow = 0;
+				}
+			}
+		}
+		
+		int diagonalScore1 = 0;
+		// Checking for Diagonal (from down to up) wins
+		for (int i = 2 - 1; i < grid.length; i++) {
+			int inARow = 0;
+			for (int j = 0; j < i+1; j++) {
+				if (grid[i-j][j] == playerToken) {
+					inARow++;
+				} else {
+					if (inARow == 2) {
+						diagonalScore1 += twoInARowScore;
+					}
+					else if (inARow == 3) {
+						diagonalScore1 += threeInARowScore;
+					}
+					inARow = 0;
+				}
+			}
+		}
+		int bottomRowCoord = grid.length - 1;
+		for (int i = 1; i < grid[0].length - (2 - 1); i++) {
+			int inARow = 0;
+			for (int j = i; j < grid[0].length; j++) {
+				if (grid[bottomRowCoord-(j-i)][j] == playerToken) {
+					inARow++;
+				} else {
+					if (inARow == 2) {
+						diagonalScore1 += twoInARowScore;
+					}
+					else if (inARow == 3) {
+						diagonalScore1 += threeInARowScore;
+					}
+					inARow = 0;
+				}
+			}
+		}
+		
+		int diagonalScore2 = 0;
+		// Checking for Diagonal (from up to down) wins
+		for (int i = grid[0].length - 2; i > 0 ; i--) {
+			int inARow = 0;
+			for (int j = i; j < grid[0].length; j++) {
+				if (grid[j-i][j] == playerToken) {
+					inARow++;
+				} else {
+					if (inARow == 2) {
+						diagonalScore2 += twoInARowScore;
+					}
+					else if (inARow == 3) {
+						diagonalScore2 += threeInARowScore;
+					}
+					inARow = 0;
+				}
+			}
+		}
+		for (int i = 0; i < grid.length - (2 - 1); i++) {
+			int inARow = 0;
+			for (int j = 0; j < grid.length - i; j++) {
+				if (grid[i+j][j] == playerToken) {
+					inARow++;
+				} else {
+					if (inARow == 2) {
+						diagonalScore2 += twoInARowScore;
+					}
+					else if (inARow == 3) {
+						diagonalScore2 += threeInARowScore;
+					}
+					inARow = 0;
+				}
+			}
+		}
+		return horizontalScore + verticalScore + diagonalScore1 + diagonalScore2;
 	}
 }
