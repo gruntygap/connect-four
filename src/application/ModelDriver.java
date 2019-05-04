@@ -13,7 +13,7 @@ public class ModelDriver {
 		// Decide if you want the AI to play with you ;)
 		// AI will be player 1 with the default configuration
 		boolean ai = true;
-		AIPlayer aiPlayer = new AIPlayer();
+		AIPlayer aiPlayer = new AIPlayer(8);
 		
 		// Start new game
 		GameModel game = new GameModel(6, 7);

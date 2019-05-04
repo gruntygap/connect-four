@@ -5,6 +5,16 @@ public class AIPlayer {
 	/** The next column that the AI should move to, given that getValueOfNextMove method has been called */
 	private int nextColumn;
 	
+	private int maxDepth;
+	
+	/**
+	 * The constructor for the AI player
+	 * @param difficulty - The max depth that the AI player should search.
+	 */
+	public AIPlayer(int difficulty) {
+		this.maxDepth = difficulty;
+	}
+	
 	/**
 	 * Gets the value of the move for the AI
 	 * @return - this.nextColumn -- See doc above
@@ -36,7 +46,7 @@ public class AIPlayer {
 //				System.out.print("\n");
 //			}
 //			System.out.println("--------------------------------------");
-			int moveVal = nextMoveRecurse(newGrid, false);
+			int moveVal = nextMoveRecurse(newGrid, false, 1, -2, 2);
 			
 			if (moveVal > bestVal) {
 				this.nextColumn = pos[i];
@@ -46,7 +56,7 @@ public class AIPlayer {
 		return bestVal;
 	}
 	
-	public int nextMoveRecurse(int[][] grid, boolean isMax) {
+	public int nextMoveRecurse(int[][] grid, boolean isMax, int depth, int alpha, int beta) {
 		// Evaluations of the current board, and break statements.
 		int playerMoving = isMax ? 1 : 2;
 		boolean someoneWon = hasWon(grid, playerMoving, 4);
@@ -58,37 +68,51 @@ public class AIPlayer {
 			return -1;
 		} else if (gameOver && !someoneWon) {
 			return 0;
+		} else if (depth == this.maxDepth) {
+			// RETURN SCORE
+			return 0;
 		}
 		
 		// Start the recursive elements
 		// Doing a Min-Max Search
 		if (isMax) {
-			int bestMax = -1;
+			int bestMax = -2;
+			
 			int[] pos = getPossibleMoves(grid);
 			for (int i = 0; i < pos.length; i++) {
 				int[][] newGrid = makeMove(grid, pos[i], 1);
-				int nextMax = nextMoveRecurse(newGrid, !isMax);
+				int nextMax = nextMoveRecurse(newGrid, !isMax, depth + 1, alpha, beta);
 				
 				if (nextMax > bestMax) {
 					bestMax = nextMax;
 				}
+				alpha = Math.max(alpha, bestMax);
+				
+				if (beta <= alpha) {
+					return bestMax;
+				}
 			}
 			return bestMax;
 		} else {
-			int bestMin = 1;
+			int bestMin = 2;
+			
 			int[] pos = getPossibleMoves(grid);
 			for (int i = 0; i < pos.length; i++) {
 				int[][] newGrid = makeMove(grid, pos[i], 2);
-				int nextMin = nextMoveRecurse(newGrid, !isMax);
+				int nextMin = nextMoveRecurse(newGrid, !isMax, depth + 1, alpha, beta);
 				
 				if (bestMin > nextMin) {
 					bestMin = nextMin;
 				}
+				
+				beta = Math.min(beta, bestMin);
+				
+				if (beta <= alpha) {
+					return bestMin;
+				}
 			}
 			return bestMin;
 		}
-		
-		
 	}
 	
 	public int[] getPossibleMoves(int[][] grid) {
