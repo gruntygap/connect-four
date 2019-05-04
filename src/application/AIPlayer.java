@@ -258,21 +258,30 @@ public class AIPlayer {
 	public int playerBoardVal(int[][] grid, int playerToken) {
 		int twoInARowScore = 50;
 		int threeInARowScore = 500;
+		int threeCountingAGap = 250;
 		int horizontalScore = 0;
 		// Checking for Horizontal wins
 		for(int i = 0; i < grid.length; i++) {
 			int inARow = 0;
 			for(int j = 0; j < grid[i].length; j++) {
+				boolean aSmallGap = false;
 				if (grid[i][j] == playerToken) {
 					inARow++;
+				} else if (grid[i][j] == 0 && inARow >= 1 && !aSmallGap) {
+					inARow++;
+					aSmallGap = true;
 				} else {
-					if (inARow == 2) {
+					if (inARow == 2 && !aSmallGap) {
 						horizontalScore += twoInARowScore;
 					}
-					else if (inARow == 3) {
+					else if (inARow == 3 && !aSmallGap) {
 						horizontalScore += threeInARowScore;
 					}
+					else if (inARow == 3 && aSmallGap) {
+						horizontalScore += threeCountingAGap;
+					}
 					inARow = 0;
+					aSmallGap = false;
 				}
 			}
 		}
@@ -282,16 +291,24 @@ public class AIPlayer {
 		for(int j = 0; j < grid[0].length; j++) {
 			int inARow = 0;
 			for(int i = 0; i < grid.length; i++) {
+				boolean aSmallGap = false;
 				if (grid[i][j] == playerToken) {
 					inARow++;
+				} else if (grid[i][j] == 0 && inARow >= 1 && !aSmallGap) {
+					inARow++;
+					aSmallGap = true;
 				} else {
-					if (inARow == 2) {
-						verticalScore += twoInARowScore;
+					if (inARow == 2 && !aSmallGap) {
+						horizontalScore += twoInARowScore;
 					}
-					else if (inARow == 3) {
-						verticalScore += threeInARowScore;
+					else if (inARow == 3 && !aSmallGap) {
+						horizontalScore += threeInARowScore;
+					}
+					else if (inARow == 3 && aSmallGap) {
+						horizontalScore += threeCountingAGap;
 					}
 					inARow = 0;
+					aSmallGap = false;
 				}
 			}
 		}
@@ -301,33 +318,48 @@ public class AIPlayer {
 		for (int i = 2 - 1; i < grid.length; i++) {
 			int inARow = 0;
 			for (int j = 0; j < i+1; j++) {
-				if (grid[i-j][j] == playerToken) {
+				boolean aSmallGap = false;
+				if (grid[i][j] == playerToken) {
 					inARow++;
+				} else if (grid[i][j] == 0 && inARow >= 1 && !aSmallGap) {
+					inARow++;
+					aSmallGap = true;
 				} else {
-					if (inARow == 2) {
-						diagonalScore1 += twoInARowScore;
+					if (inARow == 2 && !aSmallGap) {
+						horizontalScore += twoInARowScore;
 					}
-					else if (inARow == 3) {
-						diagonalScore1 += threeInARowScore;
+					else if (inARow == 3 && !aSmallGap) {
+						horizontalScore += threeInARowScore;
+					}
+					else if (inARow == 3 && aSmallGap) {
+						horizontalScore += threeCountingAGap;
 					}
 					inARow = 0;
+					aSmallGap = false;
 				}
 			}
 		}
-		int bottomRowCoord = grid.length - 1;
 		for (int i = 1; i < grid[0].length - (2 - 1); i++) {
 			int inARow = 0;
 			for (int j = i; j < grid[0].length; j++) {
-				if (grid[bottomRowCoord-(j-i)][j] == playerToken) {
+				boolean aSmallGap = false;
+				if (grid[i][j] == playerToken) {
 					inARow++;
+				} else if (grid[i][j] == 0 && inARow >= 1 && !aSmallGap) {
+					inARow++;
+					aSmallGap = true;
 				} else {
-					if (inARow == 2) {
-						diagonalScore1 += twoInARowScore;
+					if (inARow == 2 && !aSmallGap) {
+						horizontalScore += twoInARowScore;
 					}
-					else if (inARow == 3) {
-						diagonalScore1 += threeInARowScore;
+					else if (inARow == 3 && !aSmallGap) {
+						horizontalScore += threeInARowScore;
+					}
+					else if (inARow == 3 && aSmallGap) {
+						horizontalScore += threeCountingAGap;
 					}
 					inARow = 0;
+					aSmallGap = false;
 				}
 			}
 		}
@@ -337,32 +369,48 @@ public class AIPlayer {
 		for (int i = grid[0].length - 2; i > 0 ; i--) {
 			int inARow = 0;
 			for (int j = i; j < grid[0].length; j++) {
-				if (grid[j-i][j] == playerToken) {
+				boolean aSmallGap = false;
+				if (grid[i][j] == playerToken) {
 					inARow++;
+				} else if (grid[i][j] == 0 && inARow >= 1 && !aSmallGap) {
+					inARow++;
+					aSmallGap = true;
 				} else {
-					if (inARow == 2) {
-						diagonalScore2 += twoInARowScore;
+					if (inARow == 2 && !aSmallGap) {
+						horizontalScore += twoInARowScore;
 					}
-					else if (inARow == 3) {
-						diagonalScore2 += threeInARowScore;
+					else if (inARow == 3 && !aSmallGap) {
+						horizontalScore += threeInARowScore;
+					}
+					else if (inARow == 3 && aSmallGap) {
+						horizontalScore += threeCountingAGap;
 					}
 					inARow = 0;
+					aSmallGap = false;
 				}
 			}
 		}
 		for (int i = 0; i < grid.length - (2 - 1); i++) {
 			int inARow = 0;
 			for (int j = 0; j < grid.length - i; j++) {
-				if (grid[i+j][j] == playerToken) {
+				boolean aSmallGap = false;
+				if (grid[i][j] == playerToken) {
 					inARow++;
+				} else if (grid[i][j] == 0 && inARow >= 1 && !aSmallGap) {
+					inARow++;
+					aSmallGap = true;
 				} else {
-					if (inARow == 2) {
-						diagonalScore2 += twoInARowScore;
+					if (inARow == 2 && !aSmallGap) {
+						horizontalScore += twoInARowScore;
 					}
-					else if (inARow == 3) {
-						diagonalScore2 += threeInARowScore;
+					else if (inARow == 3 && !aSmallGap) {
+						horizontalScore += threeInARowScore;
+					}
+					else if (inARow == 3 && aSmallGap) {
+						horizontalScore += threeCountingAGap;
 					}
 					inARow = 0;
+					aSmallGap = false;
 				}
 			}
 		}
