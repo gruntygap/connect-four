@@ -34,16 +34,21 @@ public class BoardGUI extends BorderPane {
 	
 	private Label currentPlayer;
 	
+	private Label aiStatus;
+	
 	private ArrayList<ArrayList<Pane>> paneGrid;
 	
 	private GameModel model;
 	
 	private boolean ai;
 	
+	private AIPlayer aiPlayer;
+	
 	public BoardGUI() {
 		// Create objects the game is dependent on.
 		this.model = new GameModel(6, 7);
 		this.ai = true;
+		this.aiPlayer = new AIPlayer(9);
 		
 		// Configure GridPane
 		this.gp = new GridPane();
@@ -57,16 +62,38 @@ public class BoardGUI extends BorderPane {
 			try {
 				model = new GameModel(6, 7);
 				updateGUI();
+				aiMove();
 			} catch (Exception e) {
 				// Add alert?
 			}
 		});
-		this.currentPlayer = new Label("Current Turn: " + model.getTurn());
-		tb.getItems().addAll(reset,currentPlayer);
+		this.currentPlayer = new Label("Current Turn: " + model.getTurn() + ";");
+		this.aiStatus = new Label("AI Status:");
+		tb.getItems().addAll(reset,currentPlayer,aiStatus);
 		
 		// Adds items this.BoardGUI which is a BorderPane
 		this.setTop(tb);
-		this.setCenter(gp);	
+		this.setCenter(gp);
+		
+		// If AI is true, start moves
+		aiMove();
+	}
+	
+	private void aiMove() {
+		if (ai) {
+			int value = aiPlayer.getValueOfNextMove(model.getGrid());
+			this.aiStatus.setText("AI Status: " + value);
+			int move = aiPlayer.getNextColumn();
+			try {
+				model.makeMove(move, model.getTurn());
+				updateGUI();
+			} catch (Exception e) {
+				Alert badAlert = new Alert(AlertType.WARNING);
+				badAlert.setTitle("AI ERROR");
+				badAlert.setContentText("The AI messed up?: " + e.getMessage());
+				badAlert.showAndWait();
+			}
+		}
 	}
 	
 	private void initGridPane() {
@@ -89,6 +116,7 @@ public class BoardGUI extends BorderPane {
 				// Handler
 				int effectivelyFinalI = i; 
 				pane.setOnMouseReleased(e -> {
+					// Player 2 Makes a move
 					try {
 						model.makeMove(effectivelyFinalI, model.getTurn());
 						updateGUI();
@@ -98,6 +126,9 @@ public class BoardGUI extends BorderPane {
 						badAlert.setContentText(err.getMessage());
 						badAlert.showAndWait();
 					}
+					
+					// Follow up move from the AI
+					aiMove();
 				});
 				pane.setMinSize(25,25);
 				pane.setPrefSize(300, 300);
@@ -118,7 +149,7 @@ public class BoardGUI extends BorderPane {
 	
 	private void updateGUI() {
 		// Update Turn Text
-		currentPlayer.setText("Current Turn: " + model.getTurn());
+		currentPlayer.setText("Current Turn: " + model.getTurn() + ";");
 		int[][] grid = model.getGrid();
 		for (int i = 0; i < grid[0].length; i++) {
 			for (int j = 0; j < grid.length; j++) {
@@ -136,7 +167,12 @@ public class BoardGUI extends BorderPane {
 			winnerAlert.setTitle("Game Over!");
 			winnerAlert.setContentText("Player " + model.getTurn() + " won!");
 			winnerAlert.showAndWait();
+		} else if (model.boardFull()) {
+			Alert winnerAlert = new Alert(AlertType.INFORMATION);
+			winnerAlert.setTitle("Game Over!");
+			winnerAlert.setContentText("NO ONE WON");
+			winnerAlert.showAndWait();
 		}
-	}
+ 	}
 
 }
