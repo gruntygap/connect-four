@@ -13,7 +13,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 
-public class boardGUI extends BorderPane {
+public class BoardGUI extends BorderPane {
 
 	private int columns = 7;
 	
@@ -21,7 +21,7 @@ public class boardGUI extends BorderPane {
 	
 	private int turn = 1;
 	
-	public boardGUI() {
+	public BoardGUI() {
 		GridPane gp = new GridPane();
 		
 		for (int i = 0; i < columns; i ++) {
