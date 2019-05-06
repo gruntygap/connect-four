@@ -1,1 +1,12 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.game-cell {
+	-fx-border-color: black;
+
+}
+
+.game-board {
+	-fx-background-color: gray;
+	-fx-padding: 40;
+	-fx-hgap: 2;
+	-fx-vgap: 2;
+}
