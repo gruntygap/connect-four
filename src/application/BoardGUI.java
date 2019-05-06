@@ -32,6 +32,8 @@ public class BoardGUI extends BorderPane {
 	
 	private Button reset;
 	
+	private Button aiPlay;
+	
 	private Label currentPlayer;
 	
 	private Label aiStatus;
@@ -57,26 +59,49 @@ public class BoardGUI extends BorderPane {
 		
 		// Configure ToolBar
 		this.tb = new ToolBar();
+		
+		this.aiPlay = new Button("Disable AI");
+		aiPlay.setOnAction((event) -> {
+			try {
+				model = new GameModel(6, 7);
+				updateGUI();
+				if (this. ai == true) {
+					this.ai = false;
+					this.aiPlay.setText("Enable AI");
+				} else {
+					this.ai = true;
+					aiMove();
+					this.aiPlay.setText("Disable AI");
+				}
+			} catch (Exception e) {
+				// Add alet?
+			}
+		});
+		
 		this.reset = new Button("Reset");
 		reset.setOnAction((event) -> {
 			try {
 				model = new GameModel(6, 7);
 				updateGUI();
-				aiMove();
+				if (this.ai == true) {
+					aiMove();
+				}
 			} catch (Exception e) {
 				// Add alert?
 			}
 		});
 		this.currentPlayer = new Label("Current Turn: " + model.getTurn() + ";");
 		this.aiStatus = new Label("AI Status:");
-		tb.getItems().addAll(reset,currentPlayer,aiStatus);
+		tb.getItems().addAll(aiPlay, reset,currentPlayer,aiStatus);
 		
 		// Adds items this.BoardGUI which is a BorderPane
 		this.setTop(tb);
 		this.setCenter(gp);
 		
 		// If AI is true, start moves
-		aiMove();
+		if (ai == true) {
+			aiMove();
+		}
 	}
 	
 	private void aiMove() {
@@ -128,7 +153,9 @@ public class BoardGUI extends BorderPane {
 					}
 					updateGUI();
 					// Follow up move from the AI
-					aiMove();
+					if (this.ai == true) {
+						aiMove();
+					}
 				});
 				pane.setMinSize(25,25);
 				pane.setPrefSize(300, 300);
