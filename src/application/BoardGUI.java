@@ -1,5 +1,6 @@
 package application;
 
+import java.util.ArrayList;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
@@ -28,6 +29,8 @@ public class BoardGUI extends BorderPane {
 	private Button reset;
 	
 	private Label currentPlayer;
+	
+	private ArrayList<ArrayList<Pane>> paneGrid;
 	
 	private GameModel model;
 	
@@ -72,16 +75,26 @@ public class BoardGUI extends BorderPane {
 			gp.getRowConstraints().add(row);
 		}
 		
-		for (int i = 0; i < grid[0].length; i ++) {
-			for (int j = 0; j < grid.length; j ++) {
+		// Creates paneGrid with all the Pane(s)
+		paneGrid = new ArrayList<ArrayList<Pane>>();
+		for (int i = 0; i < grid[0].length; i++) {
+			paneGrid.add(new ArrayList<Pane>());
+			for (int j = 0; j < grid.length; j++) {
 				Pane pane = new Pane();
+				pane.setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, null, null)));
 				pane.setMinSize(25,25);
 				pane.setPrefSize(300, 300);
-				
 				pane.getStyleClass().add("game-cell");
-				gp.add(pane, i, j);
+				paneGrid.get(i).add(pane);
 				GridPane.setHgrow(pane, Priority.ALWAYS);
 				GridPane.setVgrow(pane, Priority.ALWAYS);
+			}
+		}
+		
+		// add each Pane from paneGrid, to GridPane gp
+		for (int i = 0; i < grid[0].length; i ++) {
+			for (int j = 0; j < grid.length; j ++) {
+				gp.add(paneGrid.get(i).get(j), i, j);
 			}
 		}
 //		if (turn == 1) {
