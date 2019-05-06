@@ -1,5 +1,11 @@
 package application;
 
+/**
+ * Connect-4 Basic AI
+ * @author grantgapinski
+ * @author baileymiddendorf
+ */
+
 public class AIPlayer {
 	
 	/** The next column that the AI should move to, given that getValueOfNextMove method has been called */

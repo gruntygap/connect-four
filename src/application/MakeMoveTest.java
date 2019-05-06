@@ -5,6 +5,12 @@ package application;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Connect-4 testing JUINT TEST
+ * @author grantgapinski
+ * @version 05/01/19
+ */
+
 class MakeMoveTest {
 	@Test
 	void lilVertWinTest() {

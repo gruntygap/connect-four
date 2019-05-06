@@ -13,6 +13,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 
+/**
+ * Connect-4 View
+ * @author grantgapinski
+ * @author baileymiddendorf
+ */
+
 public class BoardGUI extends BorderPane {
 
 	private int columns = 7;

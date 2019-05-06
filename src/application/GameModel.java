@@ -1,10 +1,12 @@
 package application;
+
 /**
  * Connect-4 Model
  * @author grantgapinski
  * @author baileymiddendorf
  * @version 05/01/19
  */
+
 public class GameModel {
 	
 	/** The 'board' which stores all the player moves */
