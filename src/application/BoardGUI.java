@@ -74,8 +74,8 @@ public class BoardGUI extends BorderPane {
 				
 				pane.getStyleClass().add("game-cell");
 				gp.add(pane, i, j);
-				gp.setHgrow(pane, Priority.ALWAYS);
-				gp.setVgrow(pane, Priority.ALWAYS);
+				GridPane.setHgrow(pane, Priority.ALWAYS);
+				GridPane.setVgrow(pane, Priority.ALWAYS);
 			}
 		}
 		
