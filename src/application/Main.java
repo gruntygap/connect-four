@@ -9,6 +9,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -19,9 +21,11 @@ import javafx.scene.paint.Color;
 
 public class Main extends Application {
 	
-	private int columns = 6;
+	private int columns = 7;
 	
-	private int rows = 5;
+	private int rows = 6;
+	
+	private int turn = 1;
 	
 	
 	
@@ -51,12 +55,12 @@ public class Main extends Application {
 			GridPane gp = new GridPane();
 			
 			for (int i = 0; i < columns; i ++) {
-				ColumnConstraints column = new ColumnConstraints(10);
+				ColumnConstraints column = new ColumnConstraints();
 				gp.getColumnConstraints().add(column);
 			}
 			
 			for (int i = 0; i < rows; i ++) {
-				RowConstraints row = new RowConstraints(10);
+				RowConstraints row = new RowConstraints();
 				gp.getRowConstraints().add(row);
 			}
 			
@@ -64,7 +68,7 @@ public class Main extends Application {
 			
 			Button reset = new Button("Reset");
 			
-			Label currentPlayer = new Label("Current Turn: " + "INSERT VALUE");
+			Label currentPlayer = new Label("Current Turn: " + turn);
 			
 			tb.getItems().addAll(reset,currentPlayer);
 			
@@ -77,10 +81,18 @@ public class Main extends Application {
 					pane.setPrefSize(300, 300);
 					
 					pane.setOnMouseReleased(e -> {
-						// update model
+						// update model by placing piece in spot
 						
 						// switches turn
-						currentPlayer.setText("Current turn: " + "INSERT VALUE");
+						currentPlayer.setText("Current turn: " + turn);
+						if (turn == 1) {
+							pane.setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, null, null)));
+							turn = 2;
+						} else {
+							pane.setBackground(new Background(new BackgroundFill(Color.DARKRED, null, null)));
+							turn = 1;
+							
+						}
 						
 						// check for a winner
 						// if winner then display
