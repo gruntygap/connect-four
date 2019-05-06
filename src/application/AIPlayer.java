@@ -39,19 +39,11 @@ public class AIPlayer {
 	}
 	
 	public int firstNextMoveRecurse(int[][] grid) {
-		int bestVal = -2;
+		int bestVal = -10001;
 		int [] pos = getPossibleMoves(grid);
 		
 		for (int i = 0; i < pos.length; i++) {
 			int[][] newGrid = makeMove(grid, pos[i], 1);
-//			System.out.println("TEST POSITION: " + pos[i]);
-//			for (int j = 0; j < newGrid.length; j++) {
-//				for (int k = 0; k < newGrid[0].length; k++) {
-//					System.out.print(newGrid[j][k] + "\t");
-//				}
-//				System.out.print("\n");
-//			}
-//			System.out.println("--------------------------------------");
 			int moveVal = nextMoveRecurse(newGrid, false, 1, -100000, 100000);
 			
 			if (moveVal > bestVal) {

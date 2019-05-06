@@ -17,7 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
-
+// TODO: COMMENT ALL FILES
 /**
  * Connect-4 View
  * @author grantgapinski
@@ -86,13 +86,14 @@ public class BoardGUI extends BorderPane {
 			int move = aiPlayer.getNextColumn();
 			try {
 				model.makeMove(move, model.getTurn());
-				updateGUI();
 			} catch (Exception e) {
 				Alert badAlert = new Alert(AlertType.WARNING);
 				badAlert.setTitle("AI ERROR");
+				e.printStackTrace();
 				badAlert.setContentText("The AI messed up?: " + e.getMessage());
 				badAlert.showAndWait();
 			}
+			updateGUI();
 		}
 	}
 	
@@ -119,14 +120,13 @@ public class BoardGUI extends BorderPane {
 					// Player 2 Makes a move
 					try {
 						model.makeMove(effectivelyFinalI, model.getTurn());
-						updateGUI();
 					} catch (Exception err) {
 						Alert badAlert = new Alert(AlertType.WARNING);
 						badAlert.setTitle("Bad Move!");
 						badAlert.setContentText(err.getMessage());
 						badAlert.showAndWait();
 					}
-					
+					updateGUI();
 					// Follow up move from the AI
 					aiMove();
 				});
