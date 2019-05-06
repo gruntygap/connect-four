@@ -1,6 +1,10 @@
 package application;
 
 import java.util.ArrayList;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+//import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
@@ -52,6 +56,7 @@ public class BoardGUI extends BorderPane {
 		reset.setOnAction((event) -> {
 			try {
 				model = new GameModel(6, 7);
+				updateGUI();
 			} catch (Exception e) {
 				// Add alert?
 			}
@@ -81,7 +86,19 @@ public class BoardGUI extends BorderPane {
 			paneGrid.add(new ArrayList<Pane>());
 			for (int j = 0; j < grid.length; j++) {
 				Pane pane = new Pane();
-				pane.setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, null, null)));
+				// Handler
+				int effectivelyFinalI = i; 
+				pane.setOnMouseReleased(e -> {
+					try {
+						model.makeMove(effectivelyFinalI, model.getTurn());
+						updateGUI();
+					} catch (Exception err) {
+						Alert badAlert = new Alert(AlertType.WARNING);
+						badAlert.setTitle("Bad Move!");
+						badAlert.setContentText(err.getMessage());
+						badAlert.showAndWait();
+					}
+				});
 				pane.setMinSize(25,25);
 				pane.setPrefSize(300, 300);
 				pane.getStyleClass().add("game-cell");
@@ -92,36 +109,34 @@ public class BoardGUI extends BorderPane {
 		}
 		
 		// add each Pane from paneGrid, to GridPane gp
-		for (int i = 0; i < grid[0].length; i ++) {
-			for (int j = 0; j < grid.length; j ++) {
+		for (int i = 0; i < grid[0].length; i++) {
+			for (int j = 0; j < grid.length; j++) {
 				gp.add(paneGrid.get(i).get(j), i, j);
 			}
 		}
-//		if (turn == 1) {
-//			pane.setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, null, null)));
-//			turn = 2;
-//		} else {
-//			pane.setBackground(new Background(new BackgroundFill(Color.DARKRED, null, null)));
-//			turn = 1;
-//			
-//		}
-//		pane.setOnMouseReleased(e -> {
-//			// 
-//			
-//			
-//			
-//			// check for a winner
-//			// if winner then display
-////			Alert winnerAlert = new Alert(AlertType.INFORMATION);
-////			winnerAlert.setTitle("Game Over!");
-////			winnerAlert.setContentText("Player" + "INSERT VALUE" + " won!");
-////			winnerAlert.showAndWait();
-//		});
 	}
 	
 	private void updateGUI() {
 		// Update Turn Text
-		currentPlayer.setText("Current turn: " + model.getTurn());
+		currentPlayer.setText("Current Turn: " + model.getTurn());
+		int[][] grid = model.getGrid();
+		for (int i = 0; i < grid[0].length; i++) {
+			for (int j = 0; j < grid.length; j++) {
+				if (grid[j][i] == 1) {
+					paneGrid.get(i).get(j).setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, null, null)));
+				} else if (grid[j][i] == 2) {
+					paneGrid.get(i).get(j).setBackground(new Background(new BackgroundFill(Color.DARKRED, null, null)));
+				} else {
+					paneGrid.get(i).get(j).setBackground(null);
+				}
+			}
+		}
+		if (model.hasWon(model.getTurn())) {
+			Alert winnerAlert = new Alert(AlertType.INFORMATION);
+			winnerAlert.setTitle("Game Over!");
+			winnerAlert.setContentText("Player " + model.getTurn() + " won!");
+			winnerAlert.showAndWait();
+		}
 	}
 
 }
