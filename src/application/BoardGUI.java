@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-//import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
@@ -17,7 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
-// TODO: COMMENT ALL FILES
+ 
 /**
  * Connect-4 View
  * @author grantgapinski
@@ -26,26 +25,39 @@ import javafx.scene.paint.Color;
 
 public class BoardGUI extends BorderPane {
 	
+	/** The Grid which is center of the BorderPane, holds the pieces for the game */
 	private GridPane gp;
 	
+	/** The toolbar for reset button and more */
 	private ToolBar tb;
 	
+	/** The reset button */
 	private Button reset;
 	
+	/** A button to control if the AI plays or not */
 	private Button aiPlay;
 	
+	/** The label signifying the current player */
 	private Label currentPlayer;
 	
+	/** The Status of the AI, which tells the estimated value of the future AI moves */
 	private Label aiStatus;
 	
+	/** The ArrayList of panes which symbolize the board */
 	private ArrayList<ArrayList<Pane>> paneGrid;
 	
+	/** The GameModel, which is the game */
 	private GameModel model;
 	
+	/** The bool to signify if the ai is going to play */
 	private boolean ai;
 	
+	/** The actual AI player object */
 	private AIPlayer aiPlayer;
 	
+	/**
+	 * The Constructor for the BoardGUI
+	 */
 	public BoardGUI() {
 		// Create objects the game is dependent on.
 		this.model = new GameModel(6, 7);
@@ -104,6 +116,9 @@ public class BoardGUI extends BorderPane {
 		}
 	}
 	
+	/**
+	 * The Method used for the AI to make its move
+	 */
 	private void aiMove() {
 		if (ai) {
 			int value = aiPlayer.getValueOfNextMove(model.getGrid());
@@ -122,6 +137,9 @@ public class BoardGUI extends BorderPane {
 		}
 	}
 	
+	/**
+	 * The method to initialize the GridPane
+	 */
 	private void initGridPane() {
 		int[][] grid = model.getGrid();
 		for (int i = 0; i < grid[0].length; i ++) {
@@ -174,6 +192,9 @@ public class BoardGUI extends BorderPane {
 		}
 	}
 	
+	/**
+	 * The method that updates the grid, as well as labels.
+	 */
 	private void updateGUI() {
 		// Update Turn Text
 		currentPlayer.setText("Current Turn: " + model.getTurn() + ";");
