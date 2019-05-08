@@ -117,12 +117,12 @@ public class BoardGUI extends BorderPane {
 		this.aiStatus = new Label("AI Status:");
 		
 		// Block of code below adds the color selectors to a ComboBox which is then added to the Toolbar
-		colorPicker1 = new ColorPicker(Color.YELLOW);
+		colorPicker1 = new ColorPicker(Color.RED);
 		colorPicker1.setOnAction((event) -> {
 			updateGUI();
 		});
 	
-		colorPicker2 = new ColorPicker(Color.RED);
+		colorPicker2 = new ColorPicker(Color.YELLOW);
 		colorPicker2.setOnAction((event) -> {
 			updateGUI();
 		});
@@ -130,7 +130,7 @@ public class BoardGUI extends BorderPane {
 		ObservableList<ColorPicker> colorOptions = 
 				FXCollections.observableArrayList(colorPicker1, colorPicker2);
 				
-		ComboBox cb = new ComboBox();
+		ComboBox<Object> cb = new ComboBox<Object>();
 		cb.getItems().add("Select Player Colors");
 		cb.getItems().addAll(colorOptions);
 		
