@@ -2,10 +2,15 @@ package application;
 
 import java.util.ArrayList;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -54,6 +59,12 @@ public class BoardGUI extends BorderPane {
 	
 	/** The actual AI player object */
 	private AIPlayer aiPlayer;
+	
+	/** The AI's/Player 1's color */
+	private ColorPicker colorPicker1;
+	
+	/** Player 2's color */
+	private ColorPicker colorPicker2;
 	
 	/**
 	 * The Constructor for the BoardGUI
@@ -104,7 +115,27 @@ public class BoardGUI extends BorderPane {
 		});
 		this.currentPlayer = new Label("Current Turn: " + model.getTurn() + ";");
 		this.aiStatus = new Label("AI Status:");
-		tb.getItems().addAll(aiPlay, reset,currentPlayer,aiStatus);
+		
+		// Block of code below adds the color selectors to a ComboBox which is then added to the Toolbar
+		colorPicker1 = new ColorPicker(Color.YELLOW);
+		colorPicker1.setOnAction((event) -> {
+			updateGUI();
+		});
+	
+		colorPicker2 = new ColorPicker(Color.RED);
+		colorPicker2.setOnAction((event) -> {
+			updateGUI();
+		});
+		
+		ObservableList<ColorPicker> colorOptions = 
+				FXCollections.observableArrayList(colorPicker1, colorPicker2);
+				
+		ComboBox cb = new ComboBox();
+		cb.getItems().add("Select Player Colors");
+		cb.getItems().addAll(colorOptions);
+		
+		cb.getSelectionModel().selectFirst();
+		tb.getItems().addAll(aiPlay, cb, reset,currentPlayer,aiStatus);
 		
 		// Adds items this.BoardGUI which is a BorderPane
 		this.setTop(tb);
@@ -202,9 +233,9 @@ public class BoardGUI extends BorderPane {
 		for (int i = 0; i < grid[0].length; i++) {
 			for (int j = 0; j < grid.length; j++) {
 				if (grid[j][i] == 1) {
-					paneGrid.get(i).get(j).setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, null, null)));
+					paneGrid.get(i).get(j).setBackground(new Background(new BackgroundFill(colorPicker1.getValue(), null, null)));
 				} else if (grid[j][i] == 2) {
-					paneGrid.get(i).get(j).setBackground(new Background(new BackgroundFill(Color.DARKRED, null, null)));
+					paneGrid.get(i).get(j).setBackground(new Background(new BackgroundFill(colorPicker2.getValue(), null, null)));
 				} else {
 					paneGrid.get(i).get(j).setBackground(null);
 				}
