@@ -105,8 +105,8 @@ public class BoardGUI extends BorderPane {
 		reset.setOnAction((event) -> {
 			try {
 				model = new GameModel(6, 7);
-				colorPicker1 = new ColorPicker(Color.RED);
-				colorPicker2 = new ColorPicker(Color.YELLOW);
+				colorPicker1.setValue(Color.RED);
+				colorPicker2.setValue(Color.YELLOW);
 				updateGUI();
 				if (this.ai == true) {
 					aiMove();
