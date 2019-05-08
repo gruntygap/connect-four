@@ -97,7 +97,10 @@ public class BoardGUI extends BorderPane {
 					this.aiPlay.setText("Disable AI");
 				}
 			} catch (Exception e) {
-				// Add alet?
+				Alert errorAlert = new Alert(AlertType.ERROR);
+				errorAlert.setTitle("Error");
+				errorAlert.setContentText("Model Creation Failed. Restart Program");
+				errorAlert.showAndWait();
 			}
 		});
 		
@@ -112,7 +115,10 @@ public class BoardGUI extends BorderPane {
 					aiMove();
 				}
 			} catch (Exception e) {
-				// Add alert?
+				Alert errorAlert = new Alert(AlertType.ERROR);
+				errorAlert.setTitle("Reset Error");
+				errorAlert.setContentText("Reset Failed. Restart Program");
+				errorAlert.showAndWait();
 			}
 		});
 		this.currentPlayer = new Label("Current Turn: " + model.getTurn() + ";");
