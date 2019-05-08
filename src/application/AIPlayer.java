@@ -39,7 +39,10 @@ public class AIPlayer {
 		return firstNextMoveRecurse(grid);
 	}
 	
-	public int firstNextMoveRecurse(int[][] grid) {
+	/**
+	 * The second Method for the Recursive function
+	 */
+	private int firstNextMoveRecurse(int[][] grid) {
 		int bestVal = -10001;
 		int [] pos = getPossibleMoves(grid);
 		
@@ -64,7 +67,7 @@ public class AIPlayer {
 	 * @param beta - The current Beta
 	 * @return Return the value of the current move
 	 */
-	public int nextMoveRecurse(int[][] grid, boolean isMax, int depth, int alpha, int beta) {
+	private int nextMoveRecurse(int[][] grid, boolean isMax, int depth, int alpha, int beta) {
 		// Evaluations of the current board, and break statements.
 		int playerMoving = isMax ? 1 : 2;
 		boolean someoneWon = hasWon(grid, playerMoving, 4);
@@ -127,7 +130,7 @@ public class AIPlayer {
 	 * @param grid - The "board" to test
 	 * @return an array of possible legit moves
 	 */
-	public int[] getPossibleMoves(int[][] grid) {
+	private int[] getPossibleMoves(int[][] grid) {
 		int count = 0;
 		for(int i = 0; i < grid[0].length; i++) {
 			if (grid[0][i] == 0) {
@@ -152,7 +155,7 @@ public class AIPlayer {
 	 * @param lengthOfWin - The length of the win. Should pretty much stay 4
 	 * @return Return true if they won
 	 */
-	public boolean hasWon(int[][] grid, int playerToken, int lengthOfWin) {
+	private boolean hasWon(int[][] grid, int playerToken, int lengthOfWin) {
 		// Checking for Horizontal wins
 		for(int i = 0; i < grid.length; i++) {
 			int inARow = 0;
@@ -247,7 +250,7 @@ public class AIPlayer {
 	 * @param playerToken - The token to place the piece at the bottom of the column
 	 * @return a new grid int[][]
 	 */
-	public int[][] makeMove(int[][] grid, int col, int playerToken) {
+	private int[][] makeMove(int[][] grid, int col, int playerToken) {
 		int[][] copyOfGrid = new int[grid.length][grid[0].length];
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[0].length; j++) {
@@ -267,7 +270,7 @@ public class AIPlayer {
 		return copyOfGrid;
 	}
 	
-	public boolean boardFull(int[][] grid) {
+	private boolean boardFull(int[][] grid) {
 		for(int i = 0; i < grid.length; i++) {
 			for(int j = 0; j < grid[i].length; j++) {
 				if (grid[i][j] == 0) {
@@ -283,7 +286,7 @@ public class AIPlayer {
 	 * @param grid - the board given
 	 * @return return an integer for the score
 	 */
-	public int getScore(int[][] grid) {
+	private int getScore(int[][] grid) {
 		return oldPlayerBoardVal(grid,1) + -(oldPlayerBoardVal(grid,2));
 	}
 	
@@ -293,7 +296,7 @@ public class AIPlayer {
 	 * @param playerToken - the token to check to see if it beneficial
 	 * @return - return a score for that token.
 	 */
-	public int playerBoardVal(int[][] grid, int playerToken) {
+	private int playerBoardVal(int[][] grid, int playerToken) {
 		int twoInARowScore = 50;
 		int threeInARowScore = 500;
 		int threeCountingAGap = 250;
@@ -461,7 +464,7 @@ public class AIPlayer {
 	 * @param playerToken - the token to check to see if it beneficial
 	 * @return - return a score for that token.
 	 */
-	public int oldPlayerBoardVal(int[][] grid, int playerToken) {
+	private int oldPlayerBoardVal(int[][] grid, int playerToken) {
 		int twoInARowScore = 50;
 		int threeInARowScore = 500;
 		int horizontalScore = 0;

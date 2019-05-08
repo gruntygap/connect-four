@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -107,6 +106,7 @@ public class BoardGUI extends BorderPane {
 		this.reset = new Button("Reset");
 		reset.setOnAction((event) -> {
 			try {
+				disablePaneHandlers(false);
 				model = new GameModel(6, 7);
 				colorPicker1.setValue(Color.RED);
 				colorPicker2.setValue(Color.YELLOW);
@@ -201,7 +201,9 @@ public class BoardGUI extends BorderPane {
 				pane.setOnMouseReleased(e -> {
 					// Player 2 Makes a move
 					try {
+						pane.setDisable(true);
 						model.makeMove(effectivelyFinalI, model.getTurn());
+						pane.setDisable(false);
 					} catch (Exception err) {
 						Alert badAlert = new Alert(AlertType.WARNING);
 						badAlert.setTitle("Bad Move!");
@@ -231,6 +233,14 @@ public class BoardGUI extends BorderPane {
 		}
 	}
 	
+	private void disablePaneHandlers(boolean val) {
+		for (int i = 0; i < paneGrid.size(); i++) {
+			for (int j = 0; j < paneGrid.get(i).size(); j++) {
+				paneGrid.get(i).get(j).setDisable(val);
+			}
+		}
+	}
+	
 	/**
 	 * The method that updates the grid, as well as labels.
 	 */
@@ -250,11 +260,13 @@ public class BoardGUI extends BorderPane {
 			}
 		}
 		if (model.hasWon(model.getTurn())) {
+			disablePaneHandlers(true);
 			Alert winnerAlert = new Alert(AlertType.INFORMATION);
 			winnerAlert.setTitle("Game Over!");
 			winnerAlert.setContentText("Player " + model.getTurn() + " won!");
 			winnerAlert.showAndWait();
 		} else if (model.boardFull()) {
+			disablePaneHandlers(true);
 			Alert winnerAlert = new Alert(AlertType.INFORMATION);
 			winnerAlert.setTitle("Game Over!");
 			winnerAlert.setContentText("NO ONE WON");
