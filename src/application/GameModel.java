@@ -4,7 +4,7 @@ package application;
  * Connect-4 Model
  * @author grantgapinski
  * @author baileymiddendorf
- * @version 05/01/19
+ * @version 05/16/19
  */
 
 public class GameModel {

@@ -25,6 +25,7 @@ import javafx.scene.paint.Color;
  * Connect-4 View
  * @author grantgapinski
  * @author baileymiddendorf
+ * @version 05/16/19
  */
 
 public class BoardGUI extends BorderPane {
@@ -159,7 +160,7 @@ public class BoardGUI extends BorderPane {
 	 * The Method used for the AI to make its move
 	 */
 	private void aiMove() {
-		if (ai) {
+		if (this.ai && !this.model.boardFull()) {
 			int value = aiPlayer.getValueOfNextMove(model.getGrid());
 			this.aiStatus.setText("AI Status: " + value);
 			int move = aiPlayer.getNextColumn();
@@ -233,6 +234,10 @@ public class BoardGUI extends BorderPane {
 		}
 	}
 	
+	/**
+	 * A method to attempt to disablePaneHanlders
+	 * @param val - True to disable, false to enable
+	 */
 	private void disablePaneHandlers(boolean val) {
 		for (int i = 0; i < paneGrid.size(); i++) {
 			for (int j = 0; j < paneGrid.get(i).size(); j++) {
@@ -243,6 +248,8 @@ public class BoardGUI extends BorderPane {
 	
 	/**
 	 * The method that updates the grid, as well as labels.
+	 * 
+	 * This could have been made more efficient, but we wanted to update colors :)
 	 */
 	private void updateGUI() {
 		// Update Turn Text

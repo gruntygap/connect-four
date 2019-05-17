@@ -296,6 +296,11 @@ public class AIPlayer {
 	 * @param playerToken - the token to check to see if it beneficial
 	 * @return - return a score for that token.
 	 */
+	// This was supposed to have a better hueristic than the old version, but the old version seems to be better
+	// I am going to leave this here, so then the grader can see the possible change we made.
+	// If any of this matters... -- Grant G
+	
+	/* <StartComment>
 	private int playerBoardVal(int[][] grid, int playerToken) {
 		int twoInARowScore = 50;
 		int threeInARowScore = 500;
@@ -457,6 +462,7 @@ public class AIPlayer {
 		}
 		return horizontalScore + verticalScore + diagonalScore1 + diagonalScore2;
 	}
+	</StartComment> */
 	
 	/**
 	 * The first method to use for the AI.

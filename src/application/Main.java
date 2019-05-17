@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 
 /**
- * Main Class
+ * Main (Driver) Class
  * @author grantGapinski
  * @author baileyMiddendorf
  */

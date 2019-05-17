@@ -1,12 +1,10 @@
 package application;
-/**
- * UNIT TEST WRITTEN BY GRANT
- */
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 /**
- * Connect-4 testing JUINT TEST
+ * Connect-4 JUnit Test for the Model's hasWon method
  * @author grantgapinski
  * @version 05/01/19
  */
