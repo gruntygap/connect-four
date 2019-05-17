@@ -1,11 +1,13 @@
 package application;
+
+import java.util.Scanner;
+
 /**
  * Connect-4 testing Driver
  * @author grantgapinski
  * @author baileymiddendorf
  * @version 05/01/19
  */
-import java.util.Scanner;
 
 public class ModelDriver {
 
